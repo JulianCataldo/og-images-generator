@@ -11,10 +11,10 @@ import { Resvg } from '@resvg/resvg-js';
 export const fetchFont = async (fontUrl) =>
 	fetch(fontUrl).then((response) => response.arrayBuffer());
 
-export const OG_DIMENSIONS = {
+export const OG_DIMENSIONS = /** @type {const} */ ({
 	width: 1200,
 	height: 630,
-};
+});
 
 const SOURCE_SANS_FONT_URL =
 	'https://unpkg.com/typeface-source-sans-pro@1.1.13/files/source-sans-pro-400.woff';
@@ -51,7 +51,9 @@ export async function renderOgImage(userConfig, options) {
 	const template = userConfig.template(templateOptions);
 
 	const litSsred = collectResultSync(renderLit(template));
-	const satoried = satoriHtml(litSsred);
+	const satoried = /** @type {import('react').ReactNode} Cast VNode */ (
+		satoriHtml(litSsred)
+	);
 
 	const svg = await satori(satoried, userConfig.renderOptions.satori);
 

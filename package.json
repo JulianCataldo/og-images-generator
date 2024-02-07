@@ -1,6 +1,6 @@
 {
   "name": "og-images-generator",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Generate OG images from a static folder. Extract metadata from HTML pages. No headless browser involved.",
   "keywords": [
     "og-images",
@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
+    "@types/react": "^18.2.55",
     "prettier": "^3.2.5",
     "typedoc": "^0.25.7",
     "typescript": "^5.3.3"

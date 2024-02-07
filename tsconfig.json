@@ -15,7 +15,7 @@
 
     "allowJs": true,
     "checkJs": true,
-    "skipLibCheck": true,
+    // "skipLibCheck": true,
 
     "moduleResolution": "Bundler",
 
