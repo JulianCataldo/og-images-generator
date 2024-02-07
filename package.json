@@ -1,0 +1,66 @@
+{
+  "name": "og-images-generator",
+  "version": "0.0.0",
+  "description": "Generate OG images from a static folder. Extract metadata from HTML pages. No headless browser involved.",
+  "keywords": [
+    "og-images",
+    "social-networks",
+    "svg-png",
+    "static",
+    "seo",
+    "ssg",
+    "cli",
+    "vite-plugin",
+    "withastro",
+    "api"
+  ],
+  "bin": {
+    "generate-og": "./src/cli.js"
+  },
+  "repository": "https://github.com/JulianCataldo/og-images-generator",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/JulianCataldo"
+  },
+  "license": "ISC",
+  "author": "Julian Cataldo <contact@juliancataldo.com> (https://www.juliancataldo.com/)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./api": {
+      "types": "./types/api.d.ts",
+      "default": "./src/api.js"
+    }
+  },
+  "files": [
+    "./*.js",
+    "./types/*.d.ts"
+  ],
+  "scripts": {
+    "types": "tsc",
+    "release": "npm run types && npm publish",
+    "build:docs": "typedoc --entryPoints src/index.js src/api.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "prettier": "^3.2.5",
+    "typedoc": "^0.25.7",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@lit-labs/ssr": "^3.2.2",
+    "@resvg/resvg-js": "^2.6.0",
+    "commander": "^12.0.0",
+    "fast-glob": "^3.3.2",
+    "parse5": "^7.1.2",
+    "picocolors": "^1.0.0",
+    "satori": "^0.10.13",
+    "satori-html": "^0.3.2"
+  }
+}
