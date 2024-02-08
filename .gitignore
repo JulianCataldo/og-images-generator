@@ -16,5 +16,9 @@ docs
 
 *.tgz
 
-demos/*
-!demos/vanilla
+# demos/*
+# !demos/vanilla
+
+test/__fixtures__/.test-outputs
+
+dist

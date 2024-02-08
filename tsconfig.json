@@ -13,16 +13,22 @@
 
     "strict": true,
 
-    "allowJs": true,
     "checkJs": true,
-    // "skipLibCheck": true,
+    "skipLibCheck": true,
 
     "moduleResolution": "Bundler",
 
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noPropertyAccessFromIndexSignature": true
+
+    // "rootDir": "."
   },
 
-  "include": ["./src/*.js"]
+  "include": [
+    //
+    "./src/*.js",
+    "./src/plugins/*.js",
+    "test/**/*.js"
+  ]
 }
