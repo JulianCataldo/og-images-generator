@@ -1,6 +1,6 @@
 {
   "name": "og-images-generator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generate OG images from a static folder. Extract metadata from HTML pages. No headless browser involved.",
   "keywords": [
     "og-images",
@@ -62,7 +62,7 @@
     "dev:test": "npm run test -- --watch",
     "types": "tsc --project tsconfig.build.json",
     "test": "node --test",
-    "build:docs": "typedoc --entryPoints src/index.js src/api.js",
+    "build:docs": "typedoc --tsconfig tsconfig.build.json --entryPoints src/index.js src/api.js",
     "release": "npm run types && npm publish"
   },
   "devDependencies": {
