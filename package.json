@@ -1,7 +1,7 @@
 {
   "name": "og-images-generator",
-  "version": "0.0.2",
-  "description": "Generate OG images from a static folder. Extract metadata from HTML pages. No headless browser involved.",
+  "version": "0.0.3",
+  "description": "Generate OG images from a static folder and / or a middleware.\nExtract metadata from HTML pages. No headless browser involved.\nComes as a CLI, API or plugins.",
   "keywords": [
     "og-images",
     "social-networks",
@@ -60,7 +60,8 @@
     "dev": "npm run dev:test & npm run dev:types",
     "dev:types": "npm run types -- --watch",
     "dev:test": "npm run test -- --watch",
-    "types": "tsc --project tsconfig.build.json",
+    "types": "npm run clean && npx tsc --project tsconfig.build.json",
+    "clean": "rm -rf ./types",
     "test": "node --test",
     "build:docs": "typedoc --tsconfig tsconfig.build.json --entryPoints src/index.js src/api.js",
     "release": "npm run types && npm publish"

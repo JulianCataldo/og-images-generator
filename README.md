@@ -9,7 +9,8 @@
 [![Prettier](https://img.shields.io/badge/Prettier-333333?logo=prettier)](https://prettier.io)
 [![EditorConfig](https://img.shields.io/badge/EditorConfig-333333?logo=editorconfig)](https://editorconfig.org)
 
-Generate OG images from a static folder. Extract metadata from HTML pages. No headless browser involved.
+Generate OG images from a static folder and / or a middleware.  
+Extract metadata from HTML pages. No headless browser involved.
 Comes as a CLI, API or plugins.
 
 ---
@@ -40,7 +41,7 @@ npm i og-images-generator
 
 Create a `og-images.config.js` in your current workspace root.
 
-See [demos/vanilla/og-images.config.js](./demos/vanilla/og-images.config.js) for a full working example.
+See this [og-images.example-config.js](./demos/__common/og-images.example-config.js) for a full working example. It's the config used in every [demo](./demos/).
 
 The gist is:
 

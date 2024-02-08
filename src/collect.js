@@ -6,29 +6,18 @@ import c from 'picocolors';
 
 /**
  * @typedef {Record<string, string>} MetaTags
- */
-/**
+ * @typedef {Record<string, any>[]} JsonLds
+ *
+ * @typedef Metadata
+ * @property {MetaTags} tags
+ * @property {JsonLds} jsonLds
+ *
  * @typedef Page
  * @property {Metadata} meta
  * @property {string} path
  */
-/**
- * @typedef Metadata
- * @property {MetaTags} tags
- * @property {Record<string, any>[]} jsonLds
- */
-
 // NOTE: unexposed for now
 // * @property {unknown} ast - Parse5 AST is untyped.
-
-/**
- * @typedef PathsOptions
- * @property {string} [base]
- * @property {string} [out]
- * @property {string} [json]
- *
- * @typedef {Required<PathsOptions>} CollectOptions
- */
 
 /**
  * @param {string} fileContent
@@ -91,6 +80,15 @@ export function extractMetadataFromHtml(fileContent) {
 
 	return { tags: metaTags, jsonLds };
 }
+
+/**
+ * @typedef PathsOptions
+ * @property {string} [base]
+ * @property {string} [out]
+ * @property {string} [json]
+ *
+ * @typedef {Required<PathsOptions>} CollectOptions
+ */
 
 /**
  * @param {CollectOptions} options
