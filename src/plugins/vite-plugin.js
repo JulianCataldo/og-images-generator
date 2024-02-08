@@ -8,8 +8,6 @@ export function viteOgImagesGenerator() {
 	return {
 		...rollupOgImagesGenerator(),
 
-		name: 'og-images-generator',
-
 		async configureServer(server) {
 			server.middlewares.use(await connectOgImagesGenerator());
 		},

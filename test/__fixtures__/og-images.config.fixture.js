@@ -1,4 +1,5 @@
-import { html, styled, OG_SIZE, FONTS } from '../../src/index.js';
+import { html, styled, OG_SIZE, FONTS } from 'og-images-generator';
+
 const style1 = styled.div`
 	display: flex;
 `;
@@ -13,9 +14,9 @@ export const paths = {
 
 /** @type {import('og-images-generator').Template} */
 export const template = ({ page }) =>
-	html` <!--  -->
+	html` <!-- Contrived example -->
 		<div style=${style1}>
-			${page.meta?.tags['og:title']}${page.meta?.tags['og:description']}
+			${page.meta?.tags['og:title']} - ${page.meta?.tags['og:description']}
 		</div>`;
 
 /** @type {import('og-images-generator').RenderOptions} */

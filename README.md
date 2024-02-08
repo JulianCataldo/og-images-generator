@@ -47,78 +47,37 @@ The gist is:
 ```js
 // ./og-images.config.js
 
-import { html, styled, OG_SIZE, FONTS } from '../../src/index.js';
+import { html, styled, OG_SIZE, FONTS } from 'og-images-generator';
+
+const style1 = styled.div`
+	display: flex;
+`;
+
+/** @type {import('og-images-generator').PathsOptions} */
+export const paths = {
+	// DEFAULTS:
+	base: './dist',
+	out: './dist/og',
+	json: './dist/og/index.json',
+};
+
+/** @type {import('og-images-generator').Template} */
+export const template = ({ page }) =>
+	html` <!-- Contrived example -->
+		<div style=${style1}>
+			${page.meta?.tags['og:title']} - ${page.meta?.tags['og:description']}
+		</div>`;
 
 /** @type {import('og-images-generator').RenderOptions} */
 export const renderOptions = {
 	satori: { fonts: [await FONTS.sourceSans()], ...OG_SIZE },
 };
-
-/** @type {import('og-images-generator').PathsOptions} */
-export const paths = {
-	// DEFAULTS:
-	// base: './dist',
-	// out: './dist/og',
-	// json: './dist/og/index.json',
-};
-
-/** @type {import('og-images-generator').Template} */
-export const template = ({ page }) => {
-	console.log('OG Template for: ', page.path);
-
-	if ('og:title' in page.meta === false) throw Error('Missing title!');
-	if ('og:description' in page.meta === false)
-		throw Error('Missing description!');
-
-	const title = page.meta['og:title'];
-	const description = page.meta['og:description'];
-
-	// IDEA:
-	// const breadcrumbs = page.meta.jsonLds.find(/* ... */)
-
-	return html` <!-- Contrived template example -->
-		<div style=${styles.container}>
-			<span>${title}</span>
-			<div style=${styles.foo}>
-				${icons.main}
-
-				<span>${description}</span>
-				<!-- etc... -->
-			</div>
-		</div>`;
-};
-
-const tokens = {
-	primaryColor: `rgb(82,245,187)`,
-};
-
-const icons = {
-	main: html`
-		<svg>
-			<!-- ... -->
-		</svg>
-	`,
-};
-
-const styles = {
-	container: styled.div`
-		display: flex;
-		height: 100%;
-		width: 100%;
-		/* ... */
-	`,
-
-	foo: styled.div`
-		display: flex;
-		color: ${tokens.primaryColor};
-		/* ... */
-	`,
-};
 ```
 
 **You need to export** `renderOptions` and `template` from your `og-images-generator` configuration file.
 
-> [!NOTE] Helpers
+> [!NOTE]  
+> Helpers
 > `styled.div` is a dummy strings concatenation literal (to get syntax highlighting).  
 > `div` is the only needed (and available) tag, as it makes no difference anyway.
 >
@@ -156,14 +115,16 @@ It's a contrived example. Fine-tuning SEO tags is an ancient, dark art.
 You'll need the `twitter:` stuff and other massaging,
 but that's really out of the scope of this library, which does not mess with your HTML.
 
-> [!NOTE] Additional ressources
+> [!NOTE]  
+> Additional ressources
 >
 > - [Demo projects](./demos)
 > - [API documentation](https://juliancataldo.github.io/og-images-generator/)
 
 ---
 
-> [!TIP] Recommended VS Code extensions
+> [!TIP]  
+> Recommended VS Code extensions
 >
 > - Styled Components for inline CSS highlighting: `styled-components.vscode-styled-components`
 > - HTML highlighting: `bierner.lit-html`
@@ -192,7 +153,7 @@ await generateOgImages(/* options */);
 ```js
 import { connectOgImagesGenerator } from 'og-images-generator/connect';
 
-app.use(await connectOgImagesGenerator());
+app.use(await connectOgImagesGenerator(/* pathPrefix: string */));
 ```
 
 ### Rollup plugin
@@ -212,7 +173,23 @@ export default {
 ### Vite plugin
 
 ```js
+import { defineConfig } from 'vite';
+import { viteOgImagesGenerator } from 'og-images-generator/vite';
 
+export default defineConfig({
+	plugins: [
+		//
+		viteOgImagesGenerator(),
+	],
+	build: {
+		rollupOptions: {
+			input: {
+				foo: 'pages/foo.html',
+				bar: 'pages/bar.html',
+			},
+		},
+	},
+});
 ```
 
 ### Astro integration
@@ -234,7 +211,7 @@ export default defineConfig({
 
 You could use a CDN proxy to handle on the fly image optimizations.  
 Also AFAIK, all major social networks crawlers are transforming and caching assets themselves.  
-It their job to normalize optimizations for later asset serving from their website.
+It's their job to normalize optimizations in order to serve assets to their users.
 
 ## References
 
