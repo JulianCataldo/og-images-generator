@@ -18,7 +18,7 @@ program.option('--json <string>').option('-j');
 
 program.parse();
 
-/** @type {import('./collect.js').CollectOptions=} */
+/** @type {import('./collect.js').PathsOptions=} */
 const options = program.opts();
 
 if (Object.keys(options).length) {

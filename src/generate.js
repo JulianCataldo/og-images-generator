@@ -15,11 +15,14 @@ export const CONFIG_FILE_PATH = path.join(process.cwd(), CONFIG_FILE_NAME);
  */
 
 /**
+ * @param {string} [path]
  * @returns {Promise<UserConfig>}
  */
-async function loadUserConfig() {
+export async function loadUserConfig(path) {
 	/** @type {unknown} */
-	const config = await import(CONFIG_FILE_PATH).catch(() => {
+	console.log(CONFIG_FILE_PATH);
+	const config = await import(path || CONFIG_FILE_PATH).catch((e) => {
+		console.error(e);
 		throw Error('Configuration not found.');
 	});
 	if (typeof config !== 'object' || !config)
@@ -58,7 +61,7 @@ async function loadUserConfig() {
  * @param {import('./render.js').RenderedOg[]} renderedImages
  * @param {string} out
  */
-async function save(renderedImages, out) {
+export async function save(renderedImages, out) {
 	await Promise.all(
 		renderedImages.map(async (rendered) => {
 			const dest = path.join(
@@ -79,7 +82,7 @@ async function save(renderedImages, out) {
 }
 
 /**
- * @param {import("./collect").CollectOptions} [options]
+ * @param {import("./collect").PathsOptions} [options]
  * @return {Promise<void>}
  * */
 export async function generateOgImages(options) {

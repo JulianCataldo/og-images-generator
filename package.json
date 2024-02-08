@@ -33,21 +33,43 @@
     "./api": {
       "types": "./types/api.d.ts",
       "default": "./src/api.js"
+    },
+    "./connect": {
+      "types": "./types/plugins/connect-middleware.d.ts",
+      "default": "./src/plugins/connect-middleware.js"
+    },
+    "./rollup": {
+      "types": "./types/plugins/rollup-plugin.d.ts",
+      "default": "./src/plugins/rollup-plugin.js"
+    },
+    "./vite": {
+      "types": "./types/plugins/vite-plugin.d.ts",
+      "default": "./src/plugins/vite-plugin.js"
+    },
+    "./astro": {
+      "types": "./types/plugins/astro-integration.d.ts",
+      "default": "./src/plugins/astro-integration.js"
     }
   },
   "files": [
     "./*.js",
-    "./types/*.d.ts"
+    "./plugins/*.js",
+    "./types/**/*.d.ts"
   ],
   "scripts": {
-    "types": "tsc",
-    "release": "npm run types && npm publish",
-    "build:docs": "typedoc --entryPoints src/index.js src/api.js"
+    "dev": "npm run dev:test & npm run dev:types",
+    "dev:types": "npm run types -- --watch",
+    "dev:test": "npm run test -- --watch",
+    "types": "tsc --project tsconfig.build.json",
+    "test": "node --test",
+    "build:docs": "typedoc --entryPoints src/index.js src/api.js",
+    "release": "npm run types && npm publish"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.55",
     "prettier": "^3.2.5",
+    "rollup": "^4.9.6",
     "typedoc": "^0.25.7",
     "typescript": "^5.3.3"
   },
@@ -63,5 +85,21 @@
     "picocolors": "^1.0.0",
     "satori": "^0.10.13",
     "satori-html": "^0.3.2"
+  },
+  "peerDependencies": {
+    "@types/connect": "^3.4.38",
+    "astro": "^4.3.5",
+    "vite": "^5.0.12"
+  },
+  "peerDependenciesMeta": {
+    "@types/connect": {
+      "optional": true
+    },
+    "astro": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
   }
 }

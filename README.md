@@ -1,4 +1,4 @@
-# og-images-generator
+# OpenGraph Images Generator <!-- omit in toc -->
 
 [![NPM](https://img.shields.io/npm/v/og-images-generator)](https://www.npmjs.com/package/og-images-generator)
 ![Downloads](https://img.shields.io/npm/dt/og-images-generator)
@@ -10,6 +10,27 @@
 [![EditorConfig](https://img.shields.io/badge/EditorConfig-333333?logo=editorconfig)](https://editorconfig.org)
 
 Generate OG images from a static folder. Extract metadata from HTML pages. No headless browser involved.
+Comes as a CLI, API or plugins.
+
+---
+
+<div > 
+<div align="center">Table of Contents</div>
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [CLI](#cli)
+  - [Programmatic (JS API)](#programmatic-js-api)
+  - [Express / Connect middleware](#express--connect-middleware)
+  - [Rollup plugin](#rollup-plugin)
+  - [Vite plugin](#vite-plugin)
+  - [Astro integration](#astro-integration)
+- [Notes on image optimization](#notes-on-image-optimization)
+- [References](#references)
+
+</div>
+
+---
 
 ## Installation
 
@@ -26,32 +47,43 @@ The gist is:
 ```js
 // ./og-images.config.js
 
-import {
-	html,
-	styled,
-	OG_DIMENSIONS,
-	SOURCE_SANS_FONT,
-} from 'og-images-generator';
+import { html, styled, OG_SIZE, FONTS } from '../../src/index.js';
 
 /** @type {import('og-images-generator').RenderOptions} */
 export const renderOptions = {
-	satori: { fonts: [await SOURCE_SANS_FONT()], ...OG_DIMENSIONS },
+	satori: { fonts: [await FONTS.sourceSans()], ...OG_SIZE },
+};
+
+/** @type {import('og-images-generator').PathsOptions} */
+export const paths = {
+	// DEFAULTS:
+	// base: './dist',
+	// out: './dist/og',
+	// json: './dist/og/index.json',
 };
 
 /** @type {import('og-images-generator').Template} */
-export const template = ({ metadata }) => {
-	if ('og:title' in metadata === false) throw Error('Missing title!');
-	if ('og:description' in metadata === false)
+export const template = ({ page }) => {
+	console.log('OG Template for: ', page.path);
+
+	if ('og:title' in page.meta === false) throw Error('Missing title!');
+	if ('og:description' in page.meta === false)
 		throw Error('Missing description!');
 
-	const title = metadata['og:title'];
-	const description = metadata['og:description'];
+	const title = page.meta['og:title'];
+	const description = page.meta['og:description'];
 
-	return html` <!--  -->
+	// IDEA:
+	// const breadcrumbs = page.meta.jsonLds.find(/* ... */)
+
+	return html` <!-- Contrived template example -->
 		<div style=${styles.container}>
+			<span>${title}</span>
 			<div style=${styles.foo}>
-				${icon.main}
-				<!-- ... -->
+				${icons.main}
+
+				<span>${description}</span>
+				<!-- etc... -->
 			</div>
 		</div>`;
 };
@@ -86,25 +118,55 @@ const styles = {
 
 **You need to export** `renderOptions` and `template` from your `og-images-generator` configuration file.
 
-> [!NOTE]  
+> [!NOTE] Helpers
 > `styled.div` is a dummy strings concatenation literal (to get syntax highlighting).  
 > `div` is the only needed (and available) tag, as it makes no difference anyway.
 >
 > Also, you don't need to wrap interpolated HTML attributes with quotes (e.g. `style="${foo}"`).  
 > `<foo-bar style=${styles.baz}></foo-bar>` just works.
 
+## Usage
+
+**As a preamble**, don't forget to add the appropriate meta for your OGs, there is plenty
+on [ressources](https://code.juliancataldo.com/component/astro-seo-metadata) on the web on how to setup your SEO with your favorite environment.
+
 ---
 
-> [!TIP]  
-> Recommended VS Code extensions:
+By default:
+
+- `https://example.com/` gives `https://example.com/og/index.png`
+- `https://example.com/my-page/` gives `https://example.com/og/my-page.png`
+
+> [!WARNING]  
+> `/` → `index.png` is an exception.  
+> We don't want `https://example.com/og.png`, as to keep this library output well segregated from the rest of your `dist`.  
+> That's why so we need to disambiguate the root path.
+
+For `https://example.com`:
+
+```html
+<meta property="og:image" content="https://example.com/og/index.png" />
+```
+
+```html
+<meta property="og:image" content="https://example.com/og/nested/my-page.png" />
+```
+
+It's a contrived example. Fine-tuning SEO tags is an ancient, dark art.  
+You'll need the `twitter:` stuff and other massaging,
+but that's really out of the scope of this library, which does not mess with your HTML.
+
+> [!NOTE] Additional ressources
+>
+> - [Demo projects](./demos)
+> - [API documentation](https://juliancataldo.github.io/og-images-generator/)
+
+---
+
+> [!TIP] Recommended VS Code extensions
 >
 > - Styled Components for inline CSS highlighting: `styled-components.vscode-styled-components`
 > - HTML highlighting: `bierner.lit-html`
-
-## Usage
-
-- [API documentation](https://juliancataldo.github.io/og-images-generator/)
-- [Demo projects](./demos)
 
 ### CLI
 
@@ -115,6 +177,8 @@ npx generate-og
 npx generate-og --base dist --out dist/og --json dist/og/index.json
 ```
 
+It will parse all the meta tags (in head) and JSON LDs script content (in head and body).
+
 ### Programmatic (JS API)
 
 ```js
@@ -122,6 +186,55 @@ import { generateOgImages } from 'og-images-generator/api';
 
 await generateOgImages(/* options */);
 ```
+
+### Express / Connect middleware
+
+```js
+import { connectOgImagesGenerator } from 'og-images-generator/connect';
+
+app.use(await connectOgImagesGenerator());
+```
+
+### Rollup plugin
+
+```js
+import { rollupOgImagesGenerator } from 'og-images-generator/rollup';
+
+/** @type {import('rollup').RollupOptions} */
+export default {
+	plugins: [
+		//
+		rollupOgImagesGenerator(),
+	],
+};
+```
+
+### Vite plugin
+
+```js
+
+```
+
+### Astro integration
+
+```js
+import { defineConfig } from 'astro/config';
+
+import { astroOgImagesGenerator } from 'og-images-generator/astro';
+
+export default defineConfig({
+	integrations: [
+		//
+		astroOgImagesGenerator(),
+	],
+});
+```
+
+## Notes on image optimization
+
+You could use a CDN proxy to handle on the fly image optimizations.  
+Also AFAIK, all major social networks crawlers are transforming and caching assets themselves.  
+It their job to normalize optimizations for later asset serving from their website.
 
 ## References
 

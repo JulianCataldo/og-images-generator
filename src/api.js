@@ -14,7 +14,7 @@ export { styled } from './dummy-literals.js';
 /**
  * @typedef {import('@lit-labs/ssr').ServerRenderedTemplate} LitServerTemplate
  * @typedef TemplateOptions
- * @property {import('./collect.js').Metadata} metadata
+ * @property {import('./collect.js').Page} page
  *
  * @typedef {(options: TemplateOptions) => LitServerTemplate} Template
  */

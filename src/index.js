@@ -6,9 +6,10 @@
 
 // export * from './generate.js';
 
-/** @typedef {import('./collect.js').Metadata} MetadataCollection */
+/** @typedef {import('./collect.js').MetaTags} Metadata */
+/** @typedef {import('./collect.js').PathsOptions} PathsOptions */
 
-export { fetchFont, OG_DIMENSIONS, SOURCE_SANS_FONT } from './render.js';
+export { fetchFont, OG_SIZE, FONTS } from './render.js';
 /** @typedef {import('./render.js').RenderOptions} RenderOptions */
 
 export { styled } from './dummy-literals.js';
@@ -20,8 +21,9 @@ export const html = litHtml;
 
 /**
  * @typedef {import('@lit-labs/ssr').ServerRenderedTemplate} LitServerTemplate
+ *
  * @typedef TemplateOptions
- * @property {import('./collect.js').Metadata} metadata
+ * @property {import('./collect.js').Page} page
  *
  * @typedef {(options: TemplateOptions) => LitServerTemplate} Template
  */
