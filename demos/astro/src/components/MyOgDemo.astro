@@ -1,8 +1,10 @@
 ---
-// NOTE: very naive implementation
+// NOTE: very naive implementation of a visualizer.
+// You are not supposed to use this inside your website
+// (but you could, with a polished up component).
 
 const host =
-	// NOTE: Quick and dirty for demo. Don't do that IRL.
+	// NOTE: Quick and dirty for demo. Don't do that IRL please.
 	Astro.url.protocol + "//" + Astro.url.hostname + ":" + Astro.url.port;
 let url =
 	"og" +
@@ -22,7 +24,11 @@ console.log({ ogUrl });
 <div>
 	{ogUrl}
 	<hr />
+
 	<img src={ogUrl} />
+	<hr />
+
+	<a href="/og-endpoint-demo">Dynamic API Route Demo</a>
 </div>
 
 <style>
