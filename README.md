@@ -36,6 +36,7 @@ You can use gradients, borders, flexboxes, inline SVGs, and [more](https://githu
   - [Rollup plugin](#rollup-plugin)
   - [Vite plugin](#vite-plugin)
   - [Astro integration](#astro-integration)
+- [Possible improvements](#possible-improvements)
 - [Notes on image optimization](#notes-on-image-optimization)
 - [References](#references)
 
@@ -130,7 +131,7 @@ on [ressources](https://code.juliancataldo.com/component/astro-seo-metadata) on 
 
 That way, `og-images-generator` will crawl them back to your template.
 
-It will parse all the **meta tags** (in head) and **JSON LDs** script tags content (in head and body).
+It will parse all the **meta tags** (in head) and **JSON-LDs** script tags content (in head and body).
 
 ---
 
@@ -158,7 +159,7 @@ It's a contrived example. Fine-tuning SEO tags is an dark, ancient art. \
 You'll need the `twitter:` stuff and other massaging, so you're sure it looks great everywhere.
 But that's really out of the scope of this library, which does not mess with your HTML in the first place.
 
-Alongside meta tag, JSON LD blocks are also extracted and made available for your template to consume.
+Alongside meta tag, JSON-LD blocks are also extracted and made available for your template to consume.
 
 **_What if I need to attribute different templates depending on the page route?_** \
 To achieve per URL template variations, add your branching logic in the root template. \
@@ -316,20 +317,35 @@ export default defineConfig({
 > You can leverage Astro's **server endpoints** capabilities, paired with the `og-images-generator` JS API and **Content Collections** (or any data source).  
 > See [demos/astro/src/pages/og-endpoint-demo.ts](./demos/astro/src/pages/og-endpoint-demo.ts).
 
-<!--
-NOTE: IMPLEMENTED!
-
 ## Possible improvements
 
-For now, your configuration is evaluated once at runtime, meaning you should restart
-the node process if you need to see templates changes. On contrary, metadata are injected dynamically; you can see changes for title, description, etc. with a simple browser reload.
+Use a worker pool for when batch rendering images (in build modes).  
+Do benchmarks to ensure it's worth the complexity.
 
-Even if for Node + Express with `--watch`, it's quick and painless,
-for Vite and Astro it should be preferable to hot reload the user template.
+---
 
-Here is the immediate solution I can think of: using Vite's `ssrModuleLoader` in the middleware, so we are sure to get a fresh config. on the fly. \
-It seems feasible, so there is definitely a room for exploration here, for the next release. \
--->
+Explore externally included HTML snippets, see how to style it. \
+For example, add Source Sans font styles (for demo purpose)
+and play with `<em></em>`, `<strong></strong>`, `<small></small>`… \
+I've had mixed results here, due to the inline styles limitation, but it's worth taking a look again. \
+Typically, I prefer to keep titles and descriptions in plain text (`\n` and `\t` are safe) like: `My description.\nHey!`. \
+I enforce this rule everywhere: `package.json`, in metas, in JSON-LD, etc. No emojis either. \
+It's usually better to avoid those fancy things here,
+because you can't control how vendor's crawlers will gobble up things.
+However, I do want to add some styling support from rich text excerpt
+at some point, even if we will have to be careful, as it opens up a can of worms.
+
+---
+
+Alongside meta tags and JSON-LD blocks, provide a way to consume HTML, e.g. `<template data-og-images></template>`.  
+This will offer a way for user to do more avanced _per-route_ template injection, or for example, provide a rich-text description (see above).
+
+---
+
+Alongside all metas, provide a way to consume `<script type="application/json" data-og-images></script>`,
+which is typically found in SSRed setups, where a JSON payload is embedded in the HTML document, for further client hydration.
+
+For now, an user who wants to transfer arbitrary data will have to abuse meta tags or JSON-LDs, which is not really optimal.
 
 ## Notes on image optimization
 

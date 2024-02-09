@@ -25,7 +25,7 @@ export function dummyLiteral(
 		.map(
 			(templateString, index) =>
 				templateString +
-				// TODO: Fixe types
+				// TODO: Fix types
 				// @ts-expect-error ...
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 				(Array.isArray(args[index]) ? args[index].join('') : args[index] || ''),
