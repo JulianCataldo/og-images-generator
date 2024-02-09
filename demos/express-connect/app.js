@@ -44,4 +44,6 @@ app.get('/nested/foo', (_, res) => {
 	`);
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+	console.log('\nServer listening on port http://localhost:3000');
+});

@@ -64,9 +64,9 @@ export async function loadUserConfig(path) {
 export async function save(renderedImages, out) {
 	await Promise.all(
 		renderedImages.map(async (rendered) => {
-			const fileDest = rendered.path
-				.replace(/\/index\.html$/, '')
-				.replace(/\.html$/, '.png');
+			const fileDest =
+				rendered.path.replace(/\/index\.html$/, '').replace(/\.html$/, '') +
+				'.png';
 
 			const dest = path.join(process.cwd(), out, fileDest);
 

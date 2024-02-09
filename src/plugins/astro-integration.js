@@ -1,5 +1,5 @@
 import { generateOgImages } from 'og-images-generator/api';
-import { viteOgImagesGenerator } from './vite-plugin.js';
+import { applyViteDevServerMiddleware } from './vite-plugin.js';
 
 /**
  * @returns {import('astro').AstroIntegration}
@@ -9,17 +9,10 @@ export function astroOgImagesGenerator() {
 		name: 'og-images-generator',
 
 		hooks: {
-			'astro:config:setup': ({ updateConfig }) => {
-				updateConfig({
-					vite: {
-						plugins: [viteOgImagesGenerator()],
-					},
-				});
-			},
+			'astro:server:setup': ({ server }) =>
+				applyViteDevServerMiddleware(server),
 
-			'astro:build:done': async () => {
-				await generateOgImages();
-			},
+			'astro:build:done': () => generateOgImages(),
 		},
 	};
 }

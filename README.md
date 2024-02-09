@@ -4,22 +4,22 @@
 ![Downloads](https://img.shields.io/npm/dt/og-images-generator)
 [![ISC License](https://img.shields.io/npm/l/og-images-generator)](./LICENSE)
 [![GitHub](https://img.shields.io/badge/Repository-222222?logo=github)](https://github.com/JulianCataldo/og-images-generator)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://makeapullrequest.com)  
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://makeapullrequest.com) \
 [![TypeScript](https://img.shields.io/badge/TypeScript-333333?logo=typescript)](http://www.typescriptlang.org/)
 [![Prettier](https://img.shields.io/badge/Prettier-333333?logo=prettier)](https://prettier.io)
 [![EditorConfig](https://img.shields.io/badge/EditorConfig-333333?logo=editorconfig)](https://editorconfig.org)
 
-Generate social sharing thumbnails for your websites, with plain **HTML** + **CSS** templates.  
+Generate social sharing thumbnails for your websites, with plain **HTML** + **CSS** templates. \
 Extract metadata from pages, on-the-fly (middleware) or from distributables (static folder).
 
-**No headless browser** involved = fast cold boot, much less MBs.  
+**No headless browser** involved = fast cold boot, much less MBs. \
 Exposes all underlying APIs for full output customization.
 
 Usable as a **CLI**, an **API** or via **plugins** for **Astro**, **Express**, **Rollup** and **Vite**.
 
-Moreover, a handful of helpers are here to ease poster images authoring.
+Moreover, a handful of **helpers** + **hot module reloading** are here to ease poster images authoring.
 
-Under the hood, it will transform your HTML / CSS to **SVG**, while **retaining layout and typography calculations**, then it's converted to **PNG**.  
+Under the hood, it will transform your HTML / CSS to **SVG**, while **retaining layout and typography calculations**, then it's converted to **PNG**. \
 You can use gradients, borders, flexboxes, inline SVGs, and [more](https://github.com/vercel/satori)…
 
 ---
@@ -35,7 +35,6 @@ You can use gradients, borders, flexboxes, inline SVGs, and [more](https://githu
   - [Rollup plugin](#rollup-plugin)
   - [Vite plugin](#vite-plugin)
   - [Astro integration](#astro-integration)
-- [Possible improvements](#possible-improvements)
 - [Notes on image optimization](#notes-on-image-optimization)
 - [References](#references)
 
@@ -90,20 +89,20 @@ export const renderOptions = {
 };
 ```
 
-**At the minimum**, you need to export `renderOptions` (with **size** and **font**) and `template` from your `og-images-generator` configuration file.  
+**At the minimum**, you need to export `renderOptions` (with **size** and **font**) and `template` from your `og-images-generator` configuration file. \
 `paths` is optional.
 
-> [!NOTE]  
-> **Helpers**  
-> `styled.div` is a dummy strings concatenation literal (bringing syntax highlighting and formatting).  
+> [!NOTE] \
+> **Helpers** \
+> `styled.div` is a dummy strings concatenation literal (bringing syntax highlighting and formatting). \
 > `div` is the only needed (and available) tag, as it makes no difference anyway for this sugar.
 >
-> Also, you don't need to wrap interpolated HTML attributes with quotes (e.g. `style="${foo}"`).  
+> Also, you don't need to wrap interpolated HTML attributes with quotes (e.g. `style="${foo}"`). \
 > `<foo-bar style=${styles.baz}></foo-bar>` just works.
 
 ---
 
-You can also just clone this repo. and play with the demos for your favorite environments.  
+You can also just clone this repo. and play with the demos for your favorite environments. \
 E.g.
 
 ```sh
@@ -132,9 +131,9 @@ By default:
 - `https://example.com/` gives `https://example.com/og/index.png`
 - `https://example.com/my-page/` gives `https://example.com/og/my-page.png`
 
-> [!WARNING]  
-> `/` → `index.png` is an exception.  
-> We don't want `https://example.com/og.png`, as to keep this library output well segregated from the rest of your `dist` folder.  
+> [!WARNING] \
+> `/` → `index.png` is an exception. \
+> We don't want `https://example.com/og.png`, as to keep this library output well segregated from the rest of your `dist` folder. \
 > That's why so we need to disambiguate the root path.
 
 For `https://example.com`:
@@ -147,26 +146,26 @@ For `https://example.com`:
 <meta property="og:image" content="https://example.com/og/nested/my-page.png" />
 ```
 
-It's a contrived example. Fine-tuning SEO tags is an dark, ancient art.  
+It's a contrived example. Fine-tuning SEO tags is an dark, ancient art. \
 You'll need the `twitter:` stuff and other massaging, so you're sure it looks great everywhere.
 But that's really out of the scope of this library, which does not mess with your HTML in the first place.
 
 Alongside meta tag, JSON LD blocks are also extracted and made available for your template to consume.
 
-**_What if I need to attribute different templates depending on the page route?_**  
-To achieve per URL template variations, add your branching logic in the root template.  
-You can split and import full or partial templates accordingly if it grows too much, or to organize styles separately.  
+**_What if I need to attribute different templates depending on the page route?_** \
+To achieve per URL template variations, add your branching logic in the root template. \
+You can split and import full or partial templates accordingly if it grows too much, or to organize styles separately. \
 Also, `page.url` is provided, alongside metadata (which should hold those info too, like `og:url`).
 
 ---
 
-> [!TIP]  
+> [!TIP] \
 > Recommended VS Code extensions
 >
 > - Styled Components for inline CSS highlighting: `styled-components.vscode-styled-components`
 > - HTML highlighting: `bierner.lit-html`
 
-Please note that the HTML to SVG engine under the hood ([Satori](https://github.com/vercel/satori)) has some limitations you have to be aware of.  
+Please note that the HTML to SVG engine under the hood ([Satori](https://github.com/vercel/satori)) has some limitations you have to be aware of. \
 It's kind of trial and error, but overall, you can achieve incomparable results from pure SVGs, especially for things like typography and fluid layouts.
 
 Hopefully the [example configuration](./demos/__common/og-images.example-config.js) will guide you towards some neat patterns I'm discovering empirically and collected here.
@@ -182,7 +181,7 @@ npx generate-og --base dist --out dist/og --json dist/og/index.json
 
 ### Programmatic (JS API)
 
-Use this API if you want to build your custom workflow, or create a plugin for an unsupported dev/build tools or JS runtimes (e.g. "serverless" functions).
+Use this API if you want to build your custom workflow, or create a plugin for an unsupported dev/build tools or JS runtimes (e.g. "serverless" functions, Astro's server endpoints…).
 
 ```js
 import * as api from 'og-images-generator/api';
@@ -273,6 +272,11 @@ export default defineConfig({
 });
 ```
 
+Also, it could be possible to leverage Astro's server endpoints capabilities, paired with the `og-images-generator` JS API.
+
+<!--
+NOTE: IMPLEMENTED!
+
 ## Possible improvements
 
 For now, your configuration is evaluated once at runtime, meaning you should restart
@@ -281,13 +285,14 @@ the node process if you need to see templates changes. On contrary, metadata are
 Even if for Node + Express with `--watch`, it's quick and painless,
 for Vite and Astro it should be preferable to hot reload the user template.
 
-Here is the immediate solution I can think of: using Vite's `ssrModuleLoader` in the middleware, so we are sure to get a fresh config. on the fly.  
-It seems feasible, so there is definitely a room for exploration here, for the next release.
+Here is the immediate solution I can think of: using Vite's `ssrModuleLoader` in the middleware, so we are sure to get a fresh config. on the fly. \
+It seems feasible, so there is definitely a room for exploration here, for the next release. \
+-->
 
 ## Notes on image optimization
 
-If you're running this on a server, you should use a CDN or any kind of proxying + caching, to handle on the fly image optimizations, with the rest of your assets.  
-Also AFAIK, all major social networks crawlers are transforming and caching assets themselves.  
+If you're running this on a server, you should use a CDN or any kind of proxying + caching, to handle on the fly image optimizations, with the rest of your assets. \
+Also AFAIK, all major social networks crawlers are transforming and caching assets themselves. \
 It's their job to normalize optimizations in order to serve images to their users efficiently.
 
 ## References

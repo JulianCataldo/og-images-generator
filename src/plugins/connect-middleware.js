@@ -2,24 +2,31 @@ import {
 	renderOgImage,
 	loadUserConfig,
 	extractMetadataFromHtml,
+	ogPathToPagePath,
+	DEFAULT_OG_PATH_PREFIX,
 } from 'og-images-generator/api';
 
 /**
- * @param pathPrefix - Default: `/og/`
+ * @typedef {() => Promise<import('../generate.js').UserConfig>} ConfigReloader
+ * @param {object} [options]
+ * @param {string} [options.pathPrefix] - Default: `/og/`
+ * @param {ConfigReloader} [options.configReloader]
  * @returns {Promise<import('connect').NextHandleFunction>}
  */
-export async function connectOgImagesGenerator(pathPrefix = '/og/') {
-	const config = await loadUserConfig();
+export async function connectOgImagesGenerator(options) {
+	let config = options?.configReloader ? null : await loadUserConfig();
+
+	const prefix = options?.pathPrefix ?? DEFAULT_OG_PATH_PREFIX;
 
 	return async (req, res, next) => {
+		if (options?.configReloader) config = await options.configReloader();
+
+		if (!config) return next();
 		if (!req.url) return next();
-		if (req.url.startsWith(pathPrefix) === false) return next();
+		if (req.url.startsWith(prefix) === false) return next();
 
 		const base = 'http://' + req.rawHeaders[req.rawHeaders.indexOf('Host') + 1];
-		const path = req.url
-			.replace(pathPrefix, '')
-			.replace(/^index.png$/, '')
-			.replace(/\.png$/, '');
+		const path = ogPathToPagePath(req.url);
 
 		const pageUrl = new URL(path, base).href;
 

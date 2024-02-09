@@ -9,11 +9,11 @@ import c from 'picocolors';
  * @typedef {Record<string, any>[]} JsonLds
  *
  * @typedef Metadata
- * @property {MetaTags} tags
- * @property {JsonLds} jsonLds
+ * @property {MetaTags} [tags]
+ * @property {JsonLds} [jsonLds]
  *
  * @typedef Page
- * @property {Metadata} meta
+ * @property {Metadata} [meta]
  * @property {string} path
  */
 // NOTE: unexposed for now
@@ -42,7 +42,7 @@ export function extractMetadataFromHtml(fileContent) {
 		['meta'].includes(node.nodeName),
 	);
 
-	/** @type {Page['meta']['jsonLds']} */
+	/** @type {JsonLds} */
 	const jsonLds = [];
 
 	[...head.childNodes, ...body.childNodes].forEach((node) => {
@@ -125,4 +125,20 @@ export async function collectHtmlPages(options) {
 	);
 
 	return pages.sort((p, n) => (p.path < n.path ? -1 : 1));
+}
+
+// For dynamic loading (middlewares…)
+
+export const DEFAULT_OG_PATH_PREFIX = '/og/';
+
+/**
+ * @param {string} url
+ * @param {string} [pathPrefix]
+ * @returns {string}
+ */
+export function ogPathToPagePath(url, pathPrefix = DEFAULT_OG_PATH_PREFIX) {
+	return url
+		.replace(pathPrefix ?? '', '')
+		.replace(/^index.png$/, '')
+		.replace(/\.png$/, '');
 }
