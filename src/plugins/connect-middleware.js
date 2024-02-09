@@ -34,8 +34,6 @@ export async function connectOgImagesGenerator(options) {
 
 		const meta = extractMetadataFromHtml(associatedPageHtml);
 
-		console.log(meta);
-
 		const image = await renderOgImage(config, { path, meta });
 
 		res.setHeader('Content-Type', 'image/png');

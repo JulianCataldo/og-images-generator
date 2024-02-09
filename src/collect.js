@@ -46,7 +46,6 @@ export function extractMetadataFromHtml(fileContent) {
 	const jsonLds = [];
 
 	[...head.childNodes, ...body.childNodes].forEach((node) => {
-		// console.log(node.nodeName);
 		if (
 			['script'].includes(node.nodeName) &&
 			'attrs' in node &&
@@ -58,8 +57,6 @@ export function extractMetadataFromHtml(fileContent) {
 				jsonLds.push(JSON.parse(content.value));
 		}
 	});
-
-	// console.log({ jsonLds });
 
 	/** @type {MetaTags} */
 	const metaTags = {};
