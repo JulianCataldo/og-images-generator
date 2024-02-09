@@ -1,4 +1,4 @@
-# OpenGraph Images Generator <!-- omit in toc -->
+# Open Graph Images Generator <!-- omit in toc -->
 
 [![NPM](https://img.shields.io/npm/v/og-images-generator)](https://www.npmjs.com/package/og-images-generator)
 ![Downloads](https://img.shields.io/npm/dt/og-images-generator)
@@ -9,9 +9,18 @@
 [![Prettier](https://img.shields.io/badge/Prettier-333333?logo=prettier)](https://prettier.io)
 [![EditorConfig](https://img.shields.io/badge/EditorConfig-333333?logo=editorconfig)](https://editorconfig.org)
 
-Generate OG images from a static folder and / or a middleware.  
-Extract metadata from HTML pages. No headless browser involved.
-Comes as a CLI, API or plugins.
+Generate social sharing thumbnails for your websites, with plain **HTML** + **CSS**.  
+Extract metadata from pages, on-the-fly (middleware) or from distributables (static folder).
+
+**No headless browser** involved = fast cold boot, much less MBs.  
+Exposes all underlying APIs for full output customization.
+
+Usable as a **CLI**, an **API** or via **plugins** for **Astro**, **Express**, **Rollup** and **Vite**.
+
+Moreover, a handful of helpers are here to ease poster images authoring.
+
+Under the hood, it will transform your HTML / CSS to **SVG**, while **retaining layout and typography calculations**, then it's converted to **PNG**.  
+You can use gradients, borders, flexboxes, inline SVGs, and [more](https://github.com/vercel/satori)…
 
 ---
 
@@ -32,6 +41,11 @@ Comes as a CLI, API or plugins.
 </div>
 
 ---
+
+**Additional ressources**
+
+- [Demo projects](./demos)
+- [API documentation](https://juliancataldo.github.io/og-images-generator/)
 
 ## Installation
 
@@ -75,12 +89,13 @@ export const renderOptions = {
 };
 ```
 
-**You need to export** `renderOptions` and `template` from your `og-images-generator` configuration file.
+**At the minimum**, you need to export `renderOptions` (with **size** and **font**) and `template` from your `og-images-generator` configuration file.  
+`paths` is optional.
 
 > [!NOTE]  
-> Helpers
-> `styled.div` is a dummy strings concatenation literal (to get syntax highlighting).  
-> `div` is the only needed (and available) tag, as it makes no difference anyway.
+> **Helpers**  
+> `styled.div` is a dummy strings concatenation literal (bringing syntax highlighting and formatting).  
+> `div` is the only needed (and available) tag, as it makes no difference anyway for this sugar.
 >
 > Also, you don't need to wrap interpolated HTML attributes with quotes (e.g. `style="${foo}"`).  
 > `<foo-bar style=${styles.baz}></foo-bar>` just works.
@@ -89,6 +104,10 @@ export const renderOptions = {
 
 **As a preamble**, don't forget to add the appropriate meta for your OGs, there is plenty
 on [ressources](https://code.juliancataldo.com/component/astro-seo-metadata) on the web on how to setup your SEO with your favorite environment.
+
+That way, `og-images-generator` will crawl them back to your template.
+
+It will parse all the **meta tags** (in head) and **JSON LDs** script tags content (in head and body).
 
 ---
 
@@ -99,7 +118,7 @@ By default:
 
 > [!WARNING]  
 > `/` → `index.png` is an exception.  
-> We don't want `https://example.com/og.png`, as to keep this library output well segregated from the rest of your `dist`.  
+> We don't want `https://example.com/og.png`, as to keep this library output well segregated from the rest of your `dist` folder.  
 > That's why so we need to disambiguate the root path.
 
 For `https://example.com`:
@@ -112,15 +131,16 @@ For `https://example.com`:
 <meta property="og:image" content="https://example.com/og/nested/my-page.png" />
 ```
 
-It's a contrived example. Fine-tuning SEO tags is an ancient, dark art.  
-You'll need the `twitter:` stuff and other massaging,
-but that's really out of the scope of this library, which does not mess with your HTML.
+It's a contrived example. Fine-tuning SEO tags is an dark, ancient art.  
+You'll need the `twitter:` stuff and other massaging, so you're sure it looks great everywhere.
+But that's really out of the scope of this library, which does not mess with your HTML in the first place.
 
-> [!NOTE]  
-> Additional ressources
->
-> - [Demo projects](./demos)
-> - [API documentation](https://juliancataldo.github.io/og-images-generator/)
+Alongside meta tag, JSON LD blocks are also extracted and made available for your template to consume.
+
+**_What if I need to attribute different templates depending on the page route?_**  
+To achieve per URL template variations, add your branching logic in the root template.  
+You can split and import full or partial templates accordingly if it grows too much, or to organize styles separately.  
+Also, `page.url` is provided, alongside metadata (which should hold those info too, like `og:url`).
 
 ---
 
@@ -139,22 +159,46 @@ npx generate-og
 npx generate-og --base dist --out dist/og --json dist/og/index.json
 ```
 
-It will parse all the meta tags (in head) and JSON LDs script content (in head and body).
-
 ### Programmatic (JS API)
 
-```js
-import { generateOgImages } from 'og-images-generator/api';
+Use this API if you want to build your custom workflow, or create a plugin for an unsupported dev/build tools or JS runtimes (e.g. "serverless" functions).
 
-await generateOgImages(/* options */);
+```js
+import * as api from 'og-images-generator/api';
+
+await api.generateOgImages(/* options */);
+
+await api.renderOgImage(/* options */);
 ```
+
+See also the [tests folder](./test) for more minimal insights.
 
 ### Express / Connect middleware
 
 ```js
+import express from 'express';
+
 import { connectOgImagesGenerator } from 'og-images-generator/connect';
 
-app.use(await connectOgImagesGenerator(/* pathPrefix: string */));
+const app = express();
+
+app.use(await connectOgImagesGenerator());
+
+app.get('/', (_, res) => {
+	res.send(`
+		<html>
+			<head>
+				<meta property="og:title" content="Express / Connect demo" />
+				<meta property="og:description" content="Welcome to my website!" />
+			</head>
+			<body> 
+				<img src="/og/index.png"/>
+			</body>
+		</html>
+	`);
+});
+
+app.listen(1234);
 ```
 
 ### Rollup plugin
@@ -210,16 +254,16 @@ export default defineConfig({
 
 ## Notes on image optimization
 
-You could use a CDN proxy to handle on the fly image optimizations.  
+If you're running this on a server, you should use a CDN or any kind of proxying + caching, to handle on the fly image optimizations, with the rest of your assets.  
 Also AFAIK, all major social networks crawlers are transforming and caching assets themselves.  
-It's their job to normalize optimizations in order to serve assets to their users.
+It's their job to normalize optimizations in order to serve images to their users efficiently.
 
 ## References
 
-- [vercel/satori](https://github.com/vercel/satori)
-- [natemoo-re/satori-html](https://github.com/natemoo-re/satori-html)
-- [yisibl/resvg-js](https://github.com/yisibl/resvg-js)
-- [lit/ssr](https://github.com/lit/lit/tree/d68f5c705484b9f6ea1f553d4851a9aa6a440db0/packages/labs/ssr)
+- Vercel's Satori: [vercel/satori](https://github.com/vercel/satori)
+- Nate Moore HTML to Satori AST adapter: [natemoo-re/satori-html](https://github.com/natemoo-re/satori-html)
+- SVG to PNG conversion with resvg: [yisibl/resvg-js](https://github.com/yisibl/resvg-js)
+- Static HTML template literal authoring / rendering with Lit SSR: [lit/ssr](https://github.com/lit/lit/tree/d68f5c705484b9f6ea1f553d4851a9aa6a440db0/packages/labs/ssr)
 
 ---
 

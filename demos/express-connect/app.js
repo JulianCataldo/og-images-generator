@@ -2,7 +2,6 @@ import express from 'express';
 import { connectOgImagesGenerator } from 'og-images-generator/connect';
 
 const app = express();
-const port = 3000;
 
 app.use(await connectOgImagesGenerator());
 
@@ -45,6 +44,4 @@ app.get('/nested/foo', (_, res) => {
 	`);
 });
 
-app.listen(port, () => {
-	console.log(`Example app listening on http://localhost:${port}`);
-});
+app.listen(3000);

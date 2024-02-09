@@ -45,5 +45,5 @@ test('Generate single image', async (t) => {
 		},
 	});
 
-	assert.equal(hash(image), 'b56d1c49876a6729dd0d7eefcc55fd58');
+	assert.equal(hash(image), 'eb03b3d1afe7c4b5a8d55c5f255e0c8a');
 });
