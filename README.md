@@ -15,7 +15,7 @@ Extract metadata from pages, on-the-fly (middleware) or from distributables (sta
 **No headless browser** involved = fast cold boot, much less MBs. \
 Exposes all underlying APIs for full output customization.
 
-Usable as a **CLI**, an **API** or via **plugins** for **Astro**, **Express**, **Rollup** and **Vite**.
+Usable as a **CLI**, an **API** or via **plugins** for **Astro**, **Express**, **Rollup**, **Vite** and **Web Dev Server**.
 
 Moreover, a handful of **helpers** + **hot module reloading** are here to ease poster images authoring.
 
@@ -32,6 +32,7 @@ You can use gradients, borders, flexboxes, inline SVGs, and [more](https://githu
   - [CLI](#cli)
   - [Programmatic (JS API)](#programmatic-js-api)
   - [Express / Connect middleware](#express--connect-middleware)
+  - [Web Dev Server](#web-dev-server)
   - [Rollup plugin](#rollup-plugin)
   - [Vite plugin](#vite-plugin)
   - [Astro integration](#astro-integration)
@@ -53,11 +54,11 @@ You can use gradients, borders, flexboxes, inline SVGs, and [more](https://githu
 npm i og-images-generator
 ```
 
-Create a `og-images.config.js` in your current workspace root.
+Create a **`og-images.config.js`** in your current workspace root.
 
 See this [og-images.example-config.js](./demos/__common/og-images.example-config.js) for a full working example. It's the config used in every [demo](./demos/).
 
-The gist is:
+_The gist is_:
 
 ```js
 // ./og-images.config.js
@@ -92,7 +93,7 @@ export const renderOptions = {
 **At the minimum**, you need to export `renderOptions` (with **size** and **font**) and `template` from your `og-images-generator` configuration file. \
 `paths` is optional.
 
-> [!NOTE] \
+> [!NOTE]  
 > **Helpers** \
 > `styled.div` is a dummy strings concatenation literal (bringing syntax highlighting and formatting). \
 > `div` is the only needed (and available) tag, as it makes no difference anyway for this sugar.
@@ -131,7 +132,7 @@ By default:
 - `https://example.com/` gives `https://example.com/og/index.png`
 - `https://example.com/my-page/` gives `https://example.com/og/my-page.png`
 
-> [!WARNING] \
+> [!WARNING]  
 > `/` → `index.png` is an exception. \
 > We don't want `https://example.com/og.png`, as to keep this library output well segregated from the rest of your `dist` folder. \
 > That's why so we need to disambiguate the root path.
@@ -159,7 +160,7 @@ Also, `page.url` is provided, alongside metadata (which should hold those info t
 
 ---
 
-> [!TIP] \
+> [!TIP]  
 > Recommended VS Code extensions
 >
 > - Styled Components for inline CSS highlighting: `styled-components.vscode-styled-components`
@@ -169,6 +170,10 @@ Please note that the HTML to SVG engine under the hood ([Satori](https://github.
 It's kind of trial and error, but overall, you can achieve incomparable results from pure SVGs, especially for things like typography and fluid layouts.
 
 Hopefully the [example configuration](./demos/__common/og-images.example-config.js) will guide you towards some neat patterns I'm discovering empirically and collected here.
+
+> [!TIP]  
+> **Vite** and **Astro** are supporting **automatic regeneration of your template** while your edit it, thanks to **HMR**. \
+> It will even refresh your browser for you while your are visualizing your image inside an HTML document.
 
 ### CLI
 
@@ -194,6 +199,8 @@ await api.renderOgImage(/* options */);
 See also the [tests folder](./test) for more minimal insights.
 
 ### Express / Connect middleware
+
+**`my-app.js`**:
 
 ```js
 import express from 'express';
@@ -221,7 +228,29 @@ app.get('/', (_, res) => {
 app.listen(1234);
 ```
 
+### Web Dev Server
+
+```sh
+npm i express-to-koa
+npm i -D @types/express-to-koa
+```
+
+**`web-dev-server.config.js`**:
+
+```js
+import expressToKoa from 'express-to-koa';
+
+import { connectOgImagesGenerator } from 'og-images-generator/connect';
+
+/** @type {import('@web/dev-server').DevServerConfig} */
+export default {
+	middleware: [expressToKoa(await connectOgImagesGenerator())],
+};
+```
+
 ### Rollup plugin
+
+**`rollup.config.js`**:
 
 ```js
 import { rollupOgImagesGenerator } from 'og-images-generator/rollup';
@@ -236,6 +265,8 @@ export default {
 ```
 
 ### Vite plugin
+
+**`vite.config.js`**:
 
 ```js
 import { defineConfig } from 'vite';
@@ -259,6 +290,8 @@ export default defineConfig({
 
 ### Astro integration
 
+**`astro.config.js`**:
+
 ```js
 import { defineConfig } from 'astro/config';
 
@@ -272,7 +305,9 @@ export default defineConfig({
 });
 ```
 
-Also, it could be possible to leverage Astro's server endpoints capabilities, paired with the `og-images-generator` JS API.
+> [!TIP]  
+> You can leverage Astro's **server endpoints** capabilities, paired with the `og-images-generator` JS API and **Content Collections** (or any data source).  
+> See [demos/astro/src/pages/og-endpoint-demo.ts](./demos/astro/src/pages/og-endpoint-demo.ts).
 
 <!--
 NOTE: IMPLEMENTED!
