@@ -21,14 +21,12 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noPropertyAccessFromIndexSignature": true
-
-    // "rootDir": "."
   },
 
   "include": [
     //
     "./src/*.js",
     "./src/plugins/*.js",
-    "test/**/*.js"
+    "./test/**/*.js"
   ]
 }
