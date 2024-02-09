@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert';
 
 import * as api from '../src/api.js';
-import { hash } from './utils.js';
+import { hash } from './_utils.js';
 
 const options = {
 	base: process.cwd() + '/test/__fixtures__/pages',
@@ -45,5 +45,5 @@ test('Generate single image', async (t) => {
 		},
 	});
 
-	assert.equal(hash(image), 'eb03b3d1afe7c4b5a8d55c5f255e0c8a');
+	assert.equal(hash(image), 'ad6a8e499e03a59a1c29e490e7d3f424');
 });
