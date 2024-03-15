@@ -10,6 +10,7 @@ import {
  * @typedef {() => Promise<import('../generate.js').UserConfig>} ConfigReloader
  * @param {object} [options]
  * @param {string} [options.pathPrefix] - Default: `/og/`
+ * @param {boolean} [options.trailingSlash] - Default: `true`
  * @param {ConfigReloader} [options.configReloader]
  * @returns {Promise<import('connect').NextHandleFunction>}
  */
@@ -26,7 +27,11 @@ export async function connectOgImagesGenerator(options) {
 		if (req.url.startsWith(prefix) === false) return next();
 
 		const base = 'http://' + req.rawHeaders[req.rawHeaders.indexOf('Host') + 1];
-		const path = ogPathToPagePath(req.url);
+		const path = ogPathToPagePath(
+			req.url,
+			options?.pathPrefix,
+			options?.trailingSlash,
+		);
 
 		const pageUrl = new URL(path, base).href;
 

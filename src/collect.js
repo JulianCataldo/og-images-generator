@@ -133,9 +133,14 @@ export const DEFAULT_OG_PATH_PREFIX = '/og/';
  * @param {string} [pathPrefix]
  * @returns {string}
  */
-export function ogPathToPagePath(url, pathPrefix = DEFAULT_OG_PATH_PREFIX) {
+export function ogPathToPagePath(
+	url,
+	pathPrefix = DEFAULT_OG_PATH_PREFIX,
+	trailingSlash = true,
+) {
+	const suffix = trailingSlash ? '/' : '';
 	return url
 		.replace(pathPrefix ?? '', '')
-		.replace(/^index.png$/, '')
-		.replace(/\.png$/, '');
+		.replace(/^index.png$/, suffix)
+		.replace(/\.png$/, suffix);
 }
