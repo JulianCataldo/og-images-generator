@@ -7,6 +7,7 @@
 export * from './generate.js';
 export * from './collect.js';
 export * from './render.js';
+export * from './paths.js';
 
 export { html } from '@lit-labs/ssr';
 export { styled } from './dummy-literals.js';

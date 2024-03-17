@@ -29,13 +29,13 @@ You can use gradients, borders, flexboxes, inline SVGs, and [more](https://githu
 
 - [Installation](#installation)
 - [Usage](#usage)
-	- [CLI](#cli)
-	- [Programmatic (JS API)](#programmatic-js-api)
-	- [Express / Connect middleware](#express--connect-middleware)
-	- [Web Dev Server](#web-dev-server)
-	- [Rollup plugin](#rollup-plugin)
-	- [Vite plugin](#vite-plugin)
-	- [Astro integration](#astro-integration)
+  - [CLI](#cli)
+  - [Programmatic (JS API)](#programmatic-js-api)
+  - [Express / Connect middleware](#express--connect-middleware)
+  - [Web Dev Server](#web-dev-server)
+  - [Rollup plugin](#rollup-plugin)
+  - [Vite plugin](#vite-plugin)
+  - [Astro integration](#astro-integration)
 - [Possible improvements](#possible-improvements)
 - [Notes on image optimization](#notes-on-image-optimization)
 - [References](#references)
@@ -358,6 +358,17 @@ It's their job to normalize optimizations in order to serve images to their user
 - Nate Moore's HTML to Satori AST adapter: [natemoo-re/satori-html](https://github.com/natemoo-re/satori-html)
 - SVG to PNG conversion with resvg: [yisibl/resvg-js](https://github.com/yisibl/resvg-js)
 - Static HTML template literal authoring/rendering with Lit SSR: [lit/ssr](https://github.com/lit/lit/tree/d68f5c705484b9f6ea1f553d4851a9aa6a440db0/packages/labs/ssr)
+
+# Known issues
+
+- Emojis are not working with the `graphemeImages` Satori option.  
+  Workaround: use something like [emoji-strip](https://www.npmjs.com/package/emoji-strip) by
+  wrapping your injected text.
+- When interpolating text into your template literal, Lit SSR is encoding [HTML entities](https://developer.mozilla.org/en-US/docs/Glossary/Entity)
+  while Satori isn't decoding them afterward. You could use Lit's `unsafeHTML` but you'll
+  encounter a bug ([mixed dev/prod](https://github.com/lit/lit/pull/4515)).  
+  In the meanwhile, `og-images-generator` will decode the full resulting
+  template with the `entities` library, which could have some side effects (file an issue if that's the case).
 
 ---
 

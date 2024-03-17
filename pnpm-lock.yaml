@@ -20,6 +20,9 @@ dependencies:
   commander:
     specifier: ^12.0.0
     version: 12.0.0
+  entities:
+    specifier: ^4.5.0
+    version: 4.5.0
   fast-glob:
     specifier: ^3.3.2
     version: 3.3.2

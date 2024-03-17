@@ -1,6 +1,6 @@
 {
   "name": "og-images-generator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate OG images from a static folder and / or a middleware.\nExtract metadata from HTML pages. No headless browser involved.\nComes as a CLI, API or plugins.",
   "keywords": [
     "og-images",
@@ -82,6 +82,7 @@
     "@lit-labs/ssr": "^3.2.2",
     "@resvg/resvg-js": "^2.6.0",
     "commander": "^12.0.0",
+    "entities": "^4.5.0",
     "fast-glob": "^3.3.2",
     "parse5": "^7.1.2",
     "picocolors": "^1.0.0",

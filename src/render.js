@@ -3,6 +3,7 @@ import { html as satoriHtml } from 'satori-html';
 import { render as renderLit } from '@lit-labs/ssr';
 import { collectResultSync } from '@lit-labs/ssr/lib/render-result.js';
 import { Resvg } from '@resvg/resvg-js';
+import { decodeHTML } from 'entities';
 
 /**
  * @param {string} fontUrl
@@ -49,7 +50,16 @@ export async function renderOgImage(userConfig, page) {
 
 	const template = userConfig.template(templateOptions);
 
-	const litSsred = collectResultSync(renderLit(template));
+	/**
+	 * `decodeHTML` is a hack because for now, we can't use `unsafeHTML` with
+	 * string interpolation (special characters are not encoded by Lit SSR if
+	 * they are typed as-is). Also further processors (satori…) are not
+	 * decoding the HTML entities.
+	 * See this issue: https://github.com/lit/lit/pull/4515
+	 * This is the bug we get with `unsafeHTML` (mixed dev/prod…).
+	 * This hack is not optimal and should be removed ASAP.
+	 */
+	const litSsred = decodeHTML(collectResultSync(renderLit(template)));
 	const satoried = /** @type {import('react').ReactNode} Cast VNode */ (
 		satoriHtml(litSsred)
 	);

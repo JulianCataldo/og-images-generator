@@ -123,24 +123,3 @@ export async function collectHtmlPages(options) {
 
 	return pages.sort((p, n) => (p.path < n.path ? -1 : 1));
 }
-
-// For dynamic loading (middlewares…)
-
-export const DEFAULT_OG_PATH_PREFIX = '/og/';
-
-/**
- * @param {string} url
- * @param {string} [pathPrefix]
- * @returns {string}
- */
-export function ogPathToPagePath(
-	url,
-	pathPrefix = DEFAULT_OG_PATH_PREFIX,
-	trailingSlash = true,
-) {
-	const suffix = trailingSlash ? '/' : '';
-	return url
-		.replace(pathPrefix ?? '', '')
-		.replace(/^index.png$/, suffix)
-		.replace(/\.png$/, suffix);
-}
