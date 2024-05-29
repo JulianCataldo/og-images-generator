@@ -48,7 +48,7 @@ export async function renderOgImage(userConfig, page) {
 	const pageOrDefaults = page || { path: '', meta: { tags: {}, jsonLds: [] } };
 	const templateOptions = { page: pageOrDefaults };
 
-	const template = userConfig.template(templateOptions);
+	const template = await Promise.resolve(userConfig.template(templateOptions));
 
 	/**
 	 * `decodeHTML` is a hack because for now, we can't use `unsafeHTML` with

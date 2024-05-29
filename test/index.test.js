@@ -3,6 +3,7 @@ import assert from 'node:assert';
 
 import * as api from '../src/api.js';
 import { hash } from './_utils.js';
+// import { writeFile } from 'node:fs/promises';
 
 const options = {
 	base: process.cwd() + '/test/__fixtures__/pages',
@@ -46,4 +47,26 @@ test('Generate single image', async (t) => {
 	});
 
 	assert.equal(hash(image), 'ad6a8e499e03a59a1c29e490e7d3f424');
+});
+
+test('Generate single image with async. template', async (t) => {
+	const config = await api.loadUserConfig(
+		process.cwd() + '/test/__fixtures__/og-images-async.config.fixture.js',
+	);
+
+	const image = await api.renderOgImage(config, {
+		path: '/nested/page',
+		meta: {
+			tags: { 'og:title': 'hello', 'og:description': 'there' },
+			jsonLds: [],
+		},
+	});
+
+	// NOTE: For quick visual tests
+	// await writeFile(
+	// 	process.cwd() + '/test/__fixtures__/.test-outputs/img-test.png',
+	// 	image,
+	// );
+
+	assert.equal(hash(image), '62b3609ee5fd7ed967ae24a6682ccdbe');
 });
