@@ -20,6 +20,7 @@ export const applyViteDevServerMiddleware = async (server) => {
  * @returns {import('vite').Plugin}
  */
 export function viteOgImagesGenerator(options) {
+	// @ts-expect-error Some incompatible types between Vite and Rollup plugin.
 	return {
 		...rollupOgImagesGenerator(options),
 

@@ -68,31 +68,31 @@
     "release": "npm run test && npm run types && npm publish"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "@types/react": "^18.2.55",
-    "prettier": "^3.2.5",
-    "rollup": "^4.9.6",
-    "typedoc": "^0.25.7",
-    "typescript": "^5.3.3"
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "prettier": "^3.4.2",
+    "typedoc": "^0.27.5",
+    "typescript": "^5.7.2"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
     "@lit-labs/ssr": "^3.2.2",
-    "@resvg/resvg-js": "^2.6.0",
-    "commander": "^12.0.0",
-    "entities": "^4.5.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "commander": "^12.1.0",
+    "entities": "^5.0.0",
     "fast-glob": "^3.3.2",
-    "parse5": "^7.1.2",
-    "picocolors": "^1.0.0",
+    "parse5": "^7.2.1",
+    "picocolors": "^1.1.1",
     "satori": "^0.10.13",
     "satori-html": "^0.3.2"
   },
   "peerDependencies": {
     "@types/connect": "^3.4.38",
-    "astro": "^4.3.5",
-    "vite": "^5.0.12"
+    "astro": "^5.1.1",
+    "rollup": "^4.29.1",
+    "vite": "^6.0.5"
   },
   "peerDependenciesMeta": {
     "@types/connect": {
@@ -102,6 +102,9 @@
       "optional": true
     },
     "vite": {
+      "optional": true
+    },
+    "rollup": {
       "optional": true
     }
   }
