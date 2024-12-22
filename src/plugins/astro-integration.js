@@ -2,9 +2,10 @@ import { generateOgImages } from 'og-images-generator/api';
 import { applyViteDevServerMiddleware } from './vite-plugin.js';
 
 /**
+ * @param {import("../collect").PathsOptions} [options]
  * @returns {import('astro').AstroIntegration}
  */
-export function astroOgImagesGenerator() {
+export function astroOgImagesGenerator(options) {
 	return {
 		name: 'og-images-generator',
 
@@ -12,7 +13,7 @@ export function astroOgImagesGenerator() {
 			'astro:server:setup': ({ server }) =>
 				applyViteDevServerMiddleware(server),
 
-			'astro:build:done': () => generateOgImages(),
+			'astro:build:done': () => generateOgImages(options),
 		},
 	};
 }

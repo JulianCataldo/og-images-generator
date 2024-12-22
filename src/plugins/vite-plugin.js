@@ -16,11 +16,12 @@ export const applyViteDevServerMiddleware = async (server) => {
 };
 
 /**
+ * @param {import("../collect").PathsOptions} [options]
  * @returns {import('vite').Plugin}
  */
-export function viteOgImagesGenerator() {
+export function viteOgImagesGenerator(options) {
 	return {
-		...rollupOgImagesGenerator(),
+		...rollupOgImagesGenerator(options),
 
 		configureServer: (server) => applyViteDevServerMiddleware(server),
 	};
