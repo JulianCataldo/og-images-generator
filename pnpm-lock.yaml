@@ -39,7 +39,7 @@ importers:
         specifier: ^4.29.1
         version: 4.29.1
       satori:
-        specifier: ^0.10.13
+        specifier: ^0.10.14
         version: 0.10.14
       satori-html:
         specifier: ^0.3.2

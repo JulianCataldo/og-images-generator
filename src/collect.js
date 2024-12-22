@@ -83,6 +83,8 @@ export function extractMetadataFromHtml(fileContent) {
  * @property {string} [base]
  * @property {string} [out]
  * @property {string} [json]
+ * @property {string[]} [additionalPatterns]
+ * @property {import('fast-glob').Options} [globber]
  *
  * @typedef {Required<PathsOptions>} CollectOptions
  */
@@ -94,7 +96,10 @@ export function extractMetadataFromHtml(fileContent) {
 export async function collectHtmlPages(options) {
 	console.log(c.bold(c.yellow('Collecting HTML pages…')));
 
-	const files = await fastGlob(path.join(options.base, '**/*.html'));
+	const files = await fastGlob(
+		[path.join(options.base, '**/*.html'), ...options.additionalPatterns],
+		options.globber,
+	);
 
 	/** @type {Page[]} */
 	const pages = [];

@@ -85,7 +85,7 @@
     "fast-glob": "^3.3.2",
     "parse5": "^7.2.1",
     "picocolors": "^1.1.1",
-    "satori": "^0.10.13",
+    "satori": "^0.10.14",
     "satori-html": "^0.3.2"
   },
   "peerDependencies": {

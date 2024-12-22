@@ -17,13 +17,13 @@ export const applyViteDevServerMiddleware = async (server) => {
 
 /**
  * @param {import("../collect").PathsOptions} [options]
- * @returns {import('vite').Plugin}
+ * @returns {any}
  */
 export function viteOgImagesGenerator(options) {
-	// @ts-expect-error Some incompatible types between Vite and Rollup plugin.
-	return {
+	// HACK: Returns as any to prevent Vite typings mismatches.
+	return /** @type {import('vite').Plugin} */ ({
 		...rollupOgImagesGenerator(options),
 
 		configureServer: (server) => applyViteDevServerMiddleware(server),
-	};
+	});
 }

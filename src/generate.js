@@ -86,16 +86,16 @@ export async function save(renderedImages, out) {
  * @return {Promise<void>}
  * */
 export async function generateOgImages(options) {
-	const config = await loadUserConfig();
-
 	const optionsOrDefaults = {
 		base: options?.base || './dist',
 		out: options?.out || './dist/og',
 		json: options?.json || './dist/og/index.json',
+		additionalPatterns: options?.additionalPatterns || [],
+		globber: options?.globber || {},
 	};
 
 	const pages = await collectHtmlPages(optionsOrDefaults);
-
+	const config = await loadUserConfig();
 	const renderedImages = await renderAllPagesOg(pages, config);
 
 	await save(renderedImages, optionsOrDefaults.out);

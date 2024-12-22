@@ -5,10 +5,13 @@ import * as api from '../src/api.js';
 import { hash } from './_utils.js';
 // import { writeFile } from 'node:fs/promises';
 
+/** @type {import('../src/collect.js').CollectOptions} */
 const options = {
 	base: process.cwd() + '/test/__fixtures__/pages',
 	out: process.cwd() + '/test/__fixtures__/.test-outputs',
 	json: process.cwd() + '/test/__fixtures__/.test-outputs/index.json',
+	additionalPatterns: [],
+	globber: {},
 };
 
 test('Collect HTML pages metadata', async (t) => {
@@ -46,7 +49,7 @@ test('Generate single image', async (t) => {
 		},
 	});
 
-	assert.equal(hash(image), 'ad6a8e499e03a59a1c29e490e7d3f424');
+	assert.equal(hash(image), '951fcd6c24e7c6527f2caa3d8cbf32e6');
 });
 
 test('Generate single image with async. template', async (t) => {
@@ -68,5 +71,5 @@ test('Generate single image with async. template', async (t) => {
 	// 	image,
 	// );
 
-	assert.equal(hash(image), '62b3609ee5fd7ed967ae24a6682ccdbe');
+	assert.equal(hash(image), '0dc1e02ff1f555c937543540ec8acdfc');
 });
